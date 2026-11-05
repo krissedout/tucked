@@ -1,0 +1,89 @@
+/**
+ * @name Tucked
+ * @description Tucks the server list behind the left edge of the window and clears out Nitro, Shop and Quests
+ * @author kris
+ * @version 1.0.0
+ * @source https://github.com/krissedout/tucked
+ */
+
+:root {
+    --tucked-edge: 6px;
+    --tucked-ping: var(--status-danger, #da373c);
+}
+
+[class*="sidebarList_"] {
+    --custom-guild-list-width: 0px;
+    border-inline-start: none;
+    border-top-left-radius: 0;
+}
+
+nav[class*="guilds_"] {
+    position: absolute;
+    top: 0;
+    bottom: 16px;
+    left: 0;
+    z-index: 200;
+    container-type: inline-size;
+    width: 80px;
+    min-width: 80px;
+    max-width: 200px;
+    resize: horizontal;
+    background: var(--background-base-lower);
+    transform: translateX(calc(var(--tucked-edge) - 100%));
+    transition: transform 160ms cubic-bezier(0.3, 0, 0.2, 1) 240ms;
+}
+
+nav[class*="guilds_"] > * {
+    --custom-guild-list-width: 100cqw;
+    opacity: 0;
+    transition: opacity 120ms linear 240ms;
+}
+
+nav[class*="guilds_"]:hover,
+nav[class*="guilds_"]:has(:focus-visible) {
+    box-shadow: 0 0 24px rgb(0 0 0 / 0.4);
+    transform: none;
+    transition-delay: 90ms;
+}
+
+nav[class*="guilds_"]:hover > *,
+nav[class*="guilds_"]:has(:focus-visible) > * {
+    opacity: 1;
+    transition-delay: 90ms;
+}
+
+nav[class*="guilds_"]:has([class*="lowerBadge_"])::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 24px);
+    right: calc(var(--tucked-edge) - 3px);
+    width: 3px;
+    height: 48px;
+    border-radius: 0 3px 3px 0;
+    background: var(--tucked-ping);
+}
+
+nav[class*="guilds_"]:hover::after,
+nav[class*="guilds_"]:has(:focus-visible)::after {
+    display: none;
+}
+
+[class*="privateChannels_"] ul > :has(a[href="/store"], a[href="/shop"], a[href="/quest-home"]),
+#nitro_panel,
+#premium_guild_subscriptions_panel,
+#gift_panel,
+[class*="channelTextArea_"] [aria-label="Send a gift"],
+[class*="premiumUpsell"],
+[class*="upsellContainer_"],
+[class*="nitroUpsell_"],
+[class*="nitroPreviewUpsell_"],
+[class*="premiumRetentionNotice_"] {
+    display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    nav[class*="guilds_"],
+    nav[class*="guilds_"] > * {
+        transition-duration: 0ms;
+    }
+}
